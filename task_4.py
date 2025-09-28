@@ -5,7 +5,7 @@
 # Використовуючи як базу цей код, побудуйте функцію, що буде візуалізувати бінарну купу.
 # 👉🏻 Примітка. Суть завдання полягає у створенні дерева із купи.
 
-
+import heapq
 import uuid
 
 import networkx as nx
@@ -50,13 +50,28 @@ def draw_tree(tree_root):
     plt.show()
 
 
-# Створення дерева
-root = Node(0)
-root.left = Node(4)
-root.left.left = Node(5)
-root.left.right = Node(10)
-root.right = Node(1)
-root.right.left = Node(3)
+def build_heap_tree(heap, index=0):
+    if index >= len(heap):
+        return None
 
-# Відображення дерева
-draw_tree(root)
+    root = Node(heap[index])
+
+    left_index = 2 * index + 1
+    right_index = 2 * index + 2
+
+    root.left = build_heap_tree(heap, left_index)
+    root.right = build_heap_tree(heap, right_index)
+
+    return root
+
+
+if __name__ == '__main__':
+    # Припустимо, що у нас є бінарна купа у вигляді списку
+    heap_list = [1, 3, 5, 7, 9, 2]
+    heapq.heapify(heap_list)
+    print(heap_list)
+    # Побудова дерева з купи
+    heap_tree_root = build_heap_tree(heap_list)
+
+    # Візуалізація дерева бінарної купи
+    draw_tree(heap_tree_root)
